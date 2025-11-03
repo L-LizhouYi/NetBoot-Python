@@ -1,0 +1,23 @@
+#!ipxe
+# -----------------------------------------
+# Debian 12 (Bookworm) Automated NetInstall
+# Server: 192.168.1.14
+# -----------------------------------------
+
+set base-url http://192.168.1.14:8080/debian/bookworm/amd64
+set preseed-url http://192.168.1.14:8080/debian/bookworm/amd64/preseed.cfg
+
+echo Booting Debian 12 (Bookworm) automated installer...
+echo Base URL: ${base-url}
+
+kernel ${base-url}/linux auto=true priority=critical interface=auto \
+    url=${preseed-url} \
+    hostname=debian-auto-install domain=lan \
+    netcfg/choose_interface=auto \
+    debian-installer=en_US.UTF-8 locale=en_US.UTF-8 \
+    fb=false debconf/frontend=noninteractive \
+    extra_confhome=http://192.168.1.14:8080 \
+    extra_ssh_port=22 \
+    extra_web_port=8080
+initrd ${base-url}/initrd.gz
+boot
