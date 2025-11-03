@@ -1,2 +1,5 @@
 __pycache__
 .venv
+.git
+.idea
+.DS_Store
