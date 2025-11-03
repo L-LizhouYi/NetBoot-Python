@@ -1,0 +1,13 @@
+#!ipxe
+# XP/03PE (XP Mini) Network Boot using MEMDISK
+
+set base-url http://192.168.73.1:8080/winpe/firpe
+
+# PE 文件名（可为 .IMG 或 .ISO）
+set pefile 03PE.WIM
+
+echo Loading 03PE from ${base-url}/${pefile} ...
+
+kernel ${base-url}/memdisk iso raw
+initrd ${base-url}/${pefile}
+boot

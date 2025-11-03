@@ -1,0 +1,41 @@
+#!ipxe
+dhcp
+
+# 设置服务器地址和路径
+set base http://192.168.1.14:8080/winpe
+
+cpuid --ext 29 && set arch amd64 || set arch x86
+iseq ${platform} efi && goto uefi || goto bios
+
+
+# ------------------------------
+# ① UEFI 模式启动 WinPE
+# ------------------------------
+:uefi
+echo ===============================
+echo Booting WinPE (UEFI via wimboot)
+echo ===============================
+
+kernel ${base}/wimboot
+initrd ${base}/BOOTX64.EFI             bootx64.efi
+initrd ${base}/Boot/BCD                BCD
+initrd ${base}/Boot/boot.sdi           boot.sdi
+initrd ${base}/boot.wim                boot.wim
+boot
+
+
+# ------------------------------
+# ② BIOS 模式启动 WinPE
+# ------------------------------
+:bios
+echo ===============================
+echo Booting WinPE (BIOS via pxeboot.n12)
+echo ===============================
+
+kernel ${base}/wimboot
+initrd ${base}/bootmgr.exe          bootmgr.exe
+initrd ${base}/Boot/pxeboot.n12     pxeboot.n12
+initrd ${base}/Boot/BCD             BCD
+initrd ${base}/Boot/boot.sdi        boot.sdi
+initrd ${base}/boot.wim             boot.wim
+boot

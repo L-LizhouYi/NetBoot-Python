@@ -1,0 +1,20 @@
+#!ipxe
+# FirPE BIOS Network Boot (WinPE via wimboot)
+
+set base-url http://192.168.73.1:8080/winpe/firpe
+
+# 可根据你需要选择的 WinPE 版本：
+# 03PE.WIM = XP/Win7风格
+# 11PEX64.WIM = Win10/11PE风格
+set pe-file 11PEX64.WIM
+
+echo Loading FirPE from ${base-url}/${pe-file} ...
+
+
+
+kernel ${base-url}/GRUB/WIMBOOT
+initrd ${base-url}/11_BCD                BCD
+initrd ${base-url}/BOOT.SDI              BOOT.SDI
+initrd ${base-url}/BOOTMGR               BOOTMGR
+initrd ${base-url}/${pe-file}            11PEX64.WIM
+boot
